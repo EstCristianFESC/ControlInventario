@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Ventas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="icon" type="image/png" href="/views/img/icono.png">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <!-- Título del sistema -->
+            <a class="navbar-brand" href="home.html">SISTEMA DE VENTAS</a>
+
+            <!-- Usuario con ícono de perfil y cerrar sesión al lado derecho -->
+            <div class="d-flex align-items-center ms-auto">
+                <span class="text-white me-2">Administrador</span>
+                <!-- Imagen de perfil -->
+                <img src="/views/img/ico-admin.svg" alt="User Icon" class="rounded-circle me-3">
+                <!-- Icono de cerrar sesión -->
+                <button class="btn btn-light" type="button" title="Cerrar Sesión">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="bg-white border-end p-3" style="width: 250px; min-height: 100vh;">
+            <h4 class="text-center">SISTEMA DE VENTAS</h4>
+            <nav class="nav flex-column">
+                <!-- Usuarios -->
+                <a class="nav-link text-dark" data-bs-toggle="collapse" href="#usuariosSubmenu" role="button" aria-expanded="false" aria-controls="usuariosSubmenu">
+                    <i class="fas fa-users"></i> Usuarios
+                </a>
+                <div class="collapse" id="usuariosSubmenu">
+                    <a class="nav-link text-dark ms-3" href="nuevo-usuario.html">
+                        <i class="fas fa-user-plus"></i> Nuevo Usuario
+                    </a>
+                    <a class="nav-link text-dark ms-3" href="lista-usuarios.html">
+                        <i class="fas fa-list"></i> Lista de Usuarios
+                    </a>
+                </div>
+
+                <!-- Clientes -->
+                <a class="nav-link text-dark" data-bs-toggle="collapse" href="#clientesSubmenu" role="button" aria-expanded="false" aria-controls="clientesSubmenu">
+                    <i class="fas fa-user-tag"></i> Clientes
+                </a>
+                <div class="collapse" id="clientesSubmenu">
+                    <a class="nav-link text-dark ms-3" href="nuevo-cliente.html">
+                        <i class="fas fa-user-plus"></i> Nuevo Cliente
+                    </a>
+                    <a class="nav-link text-dark ms-3" href="lista-clientes.html">
+                        <i class="fas fa-list"></i> Lista de Clientes
+                    </a>
+                </div>
+
+                <!-- Categorías -->
+                <a class="nav-link text-dark" data-bs-toggle="collapse" href="#categoriasSubmenu" role="button" aria-expanded="false" aria-controls="categoriasSubmenu">
+                    <i class="fas fa-tags"></i> Categorías
+                </a>
+                <div class="collapse" id="categoriasSubmenu">
+                    <a class="nav-link text-dark ms-3" href="nueva-categoria.html">
+                        <i class="fas fa-tag"></i> Nueva Categoría
+                    </a>
+                    <a class="nav-link text-dark ms-3" href="lista-categorias.html">
+                        <i class="fas fa-list"></i> Lista de Categorías
+                    </a>
+                </div>
+
+                <!-- Productos -->
+                <a class="nav-link text-dark" data-bs-toggle="collapse" href="#productosSubmenu" role="button" aria-expanded="false" aria-controls="productosSubmenu">
+                    <i class="fas fa-box"></i> Productos
+                </a>
+                <div class="collapse" id="productosSubmenu">
+                    <a class="nav-link text-dark ms-3" href="nuevo-producto.html">
+                        <i class="fas fa-plus-square"></i> Nuevo Producto
+                    </a>
+                    <a class="nav-link text-dark ms-3" href="lista-productos.html">
+                        <i class="fas fa-list"></i> Lista de Productos
+                    </a>
+                </div>
+
+                <!-- Ventas -->
+                <a class="nav-link text-dark" data-bs-toggle="collapse" href="#ventasSubmenu" role="button" aria-expanded="false" aria-controls="ventasSubmenu">
+                    <i class="fas fa-shopping-cart"></i> Ventas
+                </a>
+                <div class="collapse" id="ventasSubmenu">
+                    <a class="nav-link text-dark ms-3" href="nueva-venta.html">
+                        <i class="fas fa-cart-plus"></i> Nueva Venta
+                    </a>
+                    <a class="nav-link text-dark ms-3" href="lista-ventas.html">
+                        <i class="fas fa-list"></i> Lista de Ventas
+                    </a>
+                </div>
+
+                <!-- Configuraciones -->
+                <a class="nav-link text-dark" href="configuracion.html">
+                    <i class="fas fa-cogs"></i> Configuraciones
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container-fluid p-4 flex-grow-1">
+            <div class="row">
+                <!-- Title -->
+                <div class="col-12">
+                    <h3>Ventas - Nueva venta</h3>
+                </div>
+
+                <!-- Formulario de producto -->
+                <div class="col-md-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <form class="row g-3">
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="Código de barras" />
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        Agregar producto
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Tabla de productos -->
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Código de barras</th>
+                                <th>Producto</th>
+                                <th>Cant.</th>
+                                <th>Precio</th>
+                                <th>Subtotal</th>
+                                <th>Actualizar</th>
+                                <th>Remover</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>****</td>
+                                <td>****</td>
+                                <td>
+                                    <input type="number" value="***" class="form-control" />
+                                </td>
+                                <td>****</td>
+                                <td>****</td>
+                                <td><button class="btn btn-success">A</button></td>
+                                <td><button class="btn btn-danger">X</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Datos de la venta -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="fecha" class="form-label">Fecha</label>
+                                    <input type="date" class="form-control" id="fecha" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cliente" class="form-label">Cliente</label>
+                                    <input type="text" class="form-control" id="cliente" value="Público General" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="total" class="form-label">Total pagado por cliente</label>
+                                    <input type="text" class="form-control" id="total" value="0.00" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cambio" class="form-label">Cambio devuelto al cliente</label>
+                                    <input type="text" class="form-control" id="cambio" value="0.00" />
+                                </div>
+                                <div class="mb-3">
+                                    <p class="h5">TOTAL A PAGAR: ****</p>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    Guardar venta
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

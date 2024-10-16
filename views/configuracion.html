@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Ventas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="icon" type="image/png" href="/views/img/icono.png">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <!-- Título del sistema -->
+            <a class="navbar-brand" href="home.html">SISTEMA DE VENTAS</a>
+
+            <!-- Usuario con ícono de perfil y cerrar sesión al lado derecho -->
+            <div class="d-flex align-items-center ms-auto">
+                <span class="text-white me-2">Administrador</span>
+                <!-- Imagen de perfil -->
+                <img src="/views/img/ico-admin.svg" alt="User Icon" class="rounded-circle me-3">
+                <!-- Icono de cerrar sesión -->
+                <button class="btn btn-light" type="button" title="Cerrar Sesión">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="bg-white border-end p-3" style="width: 250px; min-height: 100vh;">
+            <h4 class="text-center">SISTEMA DE VENTAS</h4>
+            <nav class="nav flex-column">
+                <!-- Usuarios -->
+                <a class="nav-link text-dark" data-bs-toggle="collapse" href="#usuariosSubmenu" role="button" aria-expanded="false" aria-controls="usuariosSubmenu">
+                    <i class="fas fa-users"></i> Usuarios
+                </a>
+                <div class="collapse" id="usuariosSubmenu">
+                    <a class="nav-link text-dark ms-3" href="nuevo-usuario.html">
+                        <i class="fas fa-user-plus"></i> Nuevo Usuario
+                    </a>
+                    <a class="nav-link text-dark ms-3" href="lista-usuarios.html">
+                        <i class="fas fa-list"></i> Lista de Usuarios
+                    </a>
+                </div>
+
+                <!-- Clientes -->
+                <a class="nav-link text-dark" data-bs-toggle="collapse" href="#clientesSubmenu" role="button" aria-expanded="false" aria-controls="clientesSubmenu">
+                    <i class="fas fa-user-tag"></i> Clientes
+                </a>
+                <div class="collapse" id="clientesSubmenu">
+                    <a class="nav-link text-dark ms-3" href="nuevo-cliente.html">
+                        <i class="fas fa-user-plus"></i> Nuevo Cliente
+                    </a>
+                    <a class="nav-link text-dark ms-3" href="lista-clientes.html">
+                        <i class="fas fa-list"></i> Lista de Clientes
+                    </a>
+                </div>
+
+                <!-- Categorías -->
+                <a class="nav-link text-dark" data-bs-toggle="collapse" href="#categoriasSubmenu" role="button" aria-expanded="false" aria-controls="categoriasSubmenu">
+                    <i class="fas fa-tags"></i> Categorías
+                </a>
+                <div class="collapse" id="categoriasSubmenu">
+                    <a class="nav-link text-dark ms-3" href="nueva-categoria.html">
+                        <i class="fas fa-tag"></i> Nueva Categoría
+                    </a>
+                    <a class="nav-link text-dark ms-3" href="lista-categorias.html">
+                        <i class="fas fa-list"></i> Lista de Categorías
+                    </a>
+                </div>
+
+                <!-- Productos -->
+                <a class="nav-link text-dark" data-bs-toggle="collapse" href="#productosSubmenu" role="button" aria-expanded="false" aria-controls="productosSubmenu">
+                    <i class="fas fa-box"></i> Productos
+                </a>
+                <div class="collapse" id="productosSubmenu">
+                    <a class="nav-link text-dark ms-3" href="nuevo-producto.html">
+                        <i class="fas fa-plus-square"></i> Nuevo Producto
+                    </a>
+                    <a class="nav-link text-dark ms-3" href="lista-productos.html">
+                        <i class="fas fa-list"></i> Lista de Productos
+                    </a>
+                </div>
+
+                <!-- Ventas -->
+                <a class="nav-link text-dark" data-bs-toggle="collapse" href="#ventasSubmenu" role="button" aria-expanded="false" aria-controls="ventasSubmenu">
+                    <i class="fas fa-shopping-cart"></i> Ventas
+                </a>
+                <div class="collapse" id="ventasSubmenu">
+                    <a class="nav-link text-dark ms-3" href="nueva-venta.html">
+                        <i class="fas fa-cart-plus"></i> Nueva Venta
+                    </a>
+                    <a class="nav-link text-dark ms-3" href="lista-ventas.html">
+                        <i class="fas fa-list"></i> Lista de Ventas
+                    </a>
+                </div>
+
+                <!-- Configuraciones -->
+                <a class="nav-link text-dark" href="configuracion.html">
+                    <i class="fas fa-cogs"></i> Configuraciones
+                </a>
+            </nav>
+        </div>
+
+        <div class="container mt-5">
+			<div class="row justify-content-center">
+				<div class="col-md-8">
+					<h2 class="text-start"><i class="fas fa-building me-2"></i>Empresa</h2>
+					<h5 class="text-muted">Datos de empresa</h5>
+		
+					<!-- Formulario de Datos de Empresa -->
+					<form>
+						<!-- Nombre de la Empresa -->
+						<div class="mb-3">
+							<label for="nombreEmpresa" class="form-label">Nombre</label>
+							<input type="text" class="form-control" id="nombreEmpresa" value="Zapateria S.A.S">
+						</div>
+		
+						<!-- Teléfono y Email -->
+						<div class="row">
+							<div class="col-md-6 mb-3">
+								<label for="telefono" class="form-label">Teléfono</label>
+								<input type="tel" class="form-control" id="telefono" value="3100000000">
+							</div>
+							<div class="col-md-6 mb-3">
+								<label for="email" class="form-label">Email</label>
+								<input type="email" class="form-control" id="email" value="zapateria@zapatos.com">
+							</div>
+						</div>
+		
+						<!-- Dirección -->
+						<div class="mb-3">
+							<label for="direccion" class="form-label">Dirección</label>
+							<input type="text" class="form-control" id="direccion" value="Cúcuta, Villa del Rosario">
+						</div>
+		
+						<!-- Botón de Actualizar -->
+						<div class="text-center">
+							<button type="submit" class="btn btn-success">
+								<i class="fas fa-sync-alt me-2"></i>Actualizar
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>		
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
