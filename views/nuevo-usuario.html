@@ -11,7 +11,6 @@
 </head>
 
 <body>
-
     <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
@@ -110,43 +109,38 @@
                     <h2 class="text-start"><i class="fas fa-user-plus me-2"></i> Nuevo Usuario</h2>
 
                     <!-- Formulario de Nuevo Usuario -->
-                    <form>
-                        <div class="row">
-                            <!-- Nombres -->
-                            <div class="col-md-6 mb-3">
-                                <label for="nombres" class="form-label">Nombre</label>
-                                <input type="text" class="form-control" id="nombres" placeholder="Ingrese nombres">
-                            </div>
-                        </div>
-
+                    <form action="../server/registro-usuario.php" method="POST">
                         <div class="row">
                             <!-- Usuario -->
                             <div class="col-md-6 mb-3">
                                 <label for="usuario" class="form-label">Usuario</label>
-                                <input type="text" class="form-control" id="usuario" placeholder="Ingrese usuario">
+                                <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Ingrese usuario" required>
                             </div>
-
-                            <!-- Email -->
+                    
+                            <!-- Rol -->
                             <div class="col-md-6 mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" placeholder="Ingrese email">
+                                <label for="role" class="form-label">Rol</label>
+                                <select class="form-control" id="role" name="role" required>
+                                    <option value="admin">Admin</option>
+                                    <option value="vendedor">Vendedor</option>
+                                </select>
                             </div>
                         </div>
-
+                    
                         <div class="row">
                             <!-- Clave -->
                             <div class="col-md-6 mb-3">
-                                <label for="clave" class="form-label">Clave</label>
-                                <input type="password" class="form-control" id="clave" placeholder="Ingrese clave">
+                                <label for="clave" class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" id="clave" name="clave" placeholder="Ingrese clave" required>
                             </div>
-
+                    
                             <!-- Repetir Clave -->
                             <div class="col-md-6 mb-3">
-                                <label for="repetirClave" class="form-label">Repetir clave</label>
-                                <input type="password" class="form-control" id="repetirClave" placeholder="Repita la clave">
+                                <label for="repetirClave" class="form-label">Repetir contraseña</label>
+                                <input type="password" class="form-control" id="repetirClave" name="repetirClave" placeholder="Repita la clave" required>
                             </div>
                         </div>
-
+                    
                         <!-- Botones -->
                         <div class="d-flex justify-content-center">
                             <button type="reset" class="btn btn-secondary me-2">
@@ -163,6 +157,7 @@
     </div>	
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>

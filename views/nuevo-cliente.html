@@ -31,6 +31,8 @@
         </div>
     </nav>
 
+    <div id="message" style="display: none;" class="alert"></div>
+
     <div class="d-flex">
         <!-- Sidebar -->
         <div class="bg-white border-end p-3" style="width: 250px; min-height: 100vh;">
@@ -111,58 +113,96 @@
         <div class="container mt-3">
             <h3>Clientes</h3>
             <p class="text-muted">Nuevo cliente</p>
-            <form>
+            <form id="clienteForm" onsubmit="return agregarCliente(event);">
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="tipoDocumento">Tipo de documento</label>
-                        <select id="tipoDocumento" class="form-control">
+                        <select id="tipoDocumento" name="tipoDocumento" class="form-control" required>
                             <option selected>Seleccione una opción</option>
-                            <option value="1">Cédula</option>
-                            <option value="2">Pasaporte</option>
-                            <option value="3">Licencia de conducir</option>
+                            <option value="Cédula">Cédula</option>
+                            <option value="NIT">NIT</option>
+                            <option value="Pasaporte">Pasaporte</option>
+                            <option value="No Adjudicatario">No Adjudicatario</option>
                         </select>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="numeroDocumento">Número de documento</label>
-                        <input type="text" class="form-control" id="numeroDocumento" placeholder="Número de documento">
+                        <input type="text" class="form-control" id="numeroDocumento" name="numeroDocumento" placeholder="Número de documento" required>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="nombres">Nombres</label>
-                        <input type="text" class="form-control" id="nombres" placeholder="Nombres">
+                        <input type="text" class="form-control" id="nombres" name="nombres" placeholder="Nombres" required>
                     </div>
                 </div> <br>
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="apellidos">Apellidos</label>
-                        <input type="text" class="form-control" id="apellidos" placeholder="Apellidos">
+                        <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Apellidos" required>
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="estado">Estado, provincia o departamento</label>
-                        <input type="text" class="form-control" id="estado" placeholder="Estado, provincia o departamento">
+                        <label for="estado">Departamento</label>
+                        <input type="text" class="form-control" id="estado" name="estado" placeholder="Estado, provincia o departamento" required>
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="ciudad">Ciudad o pueblo</label>
-                        <input type="text" class="form-control" id="ciudad" placeholder="Ciudad o pueblo">
+                        <label for="ciudad">Ciudad</label>
+                        <input type="text" class="form-control" id="ciudad" name="ciudad" placeholder="Ciudad o pueblo" required>
                     </div>
                 </div> <br>
                 <div class="row">
                     <div class="form-group col-md-3">
-                        <label for="direccion">Calle o dirección de casa</label>
-                        <input type="text" class="form-control" id="direccion" placeholder="Calle o dirección de casa">
+                        <label for="direccion">Dirección</label>
+                        <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Calle o dirección de casa" required>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="telefono">Teléfono</label>
-                        <input type="text" class="form-control" id="telefono" placeholder="Teléfono">
+                        <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Teléfono" required>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" placeholder="Email">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
                     </div>
                 </div> <br>
                 <button type="reset" class="btn btn-secondary mr-2">Limpiar</button>
                 <button type="submit" class="btn btn-primary">Guardar</button>
             </form>
-        </div>        
+        
+            <div id="message" style="display: none;" class="alert"></div>
+        </div>
+        
+        <script>
+            function agregarCliente(event) {
+                event.preventDefault(); // Evitar el envío normal del formulario
+        
+                const formData = new FormData(document.getElementById('clienteForm'));
+        
+                fetch('../server/agregar_cliente.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const messageDiv = document.getElementById('message');
+                    if (data.status === 'success') {
+                        messageDiv.className = 'alert alert-success'; // Clase para éxito
+                        messageDiv.textContent = data.message; // Mensaje de éxito
+                        messageDiv.style.display = 'block'; // Mostrar el mensaje
+                        // Redirigir a lista-clientes.html después de 2 segundos
+                        setTimeout(() => {
+                            window.location.href = 'lista-clientes.html';
+                        }, 2000);
+                    } else {
+                        messageDiv.className = 'alert alert-danger'; // Clase para error
+                        messageDiv.textContent = data.message; // Mensaje de error
+                        messageDiv.style.display = 'block'; // Mostrar el mensaje
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al agregar cliente:', error);
+                });
+                
+                return false; // Evitar el envío del formulario
+            }
+        </script>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

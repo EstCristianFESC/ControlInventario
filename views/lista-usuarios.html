@@ -11,6 +11,7 @@
 </head>
 
 <body>
+    <div id="message" style="display: none;"></div>
     <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
@@ -114,24 +115,64 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Nombre</th>
                         <th>Usuario</th>
-                        <th>Email</th>
                         <th>Actualizar</th>
-                        <th>Eliminar</th>
+                        <!-- Se eliminó la columna de Eliminar -->
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="7" class="text-center">No hay registros en el sistema</td>
-                    </tr>
+                <tbody id="user-list">
+                    <!-- Aquí se cargarán los usuarios desde PHP -->
+                    <!-- Asegúrate de que el script PHP también omita la columna de Eliminar -->
                 </tbody>
             </table>
         </div>
         
-    </div>
+        <script>
+            // Función para cargar la lista de usuarios
+            function loadUsers() {
+                fetch('../server/lista-usuarios.php')  // Cambia la ruta si es necesario
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('user-list').innerHTML = data;
+                    })
+                    .catch(error => console.error('Error al cargar los usuarios:', error));
+            }
+        
+            // Cargar usuarios al cargar la página
+            window.onload = loadUsers;
+        </script>
+        
+        <script>
+            // Función para obtener parámetros de la URL
+            function getParameterByName(name) {
+                const url = window.location.href;
+                name = name.replace(/[\[\]]/g, '\\$&');
+                const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                    results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, ' '));
+            }
+        
+            // Verifica si hay un mensaje en la URL
+            const success = getParameterByName('success');
+            const error = getParameterByName('error');
+            const messageDiv = document.getElementById('message');
+        
+            if (success) {
+                messageDiv.className = 'alert alert-success'; // Estilo para éxito
+                messageDiv.textContent = success;
+                messageDiv.style.display = 'block'; // Mostrar el mensaje
+            } else if (error) {
+                messageDiv.className = 'alert alert-danger'; // Estilo para error
+                messageDiv.textContent = error; // Mensaje de error dinámico
+                messageDiv.style.display = 'block'; // Mostrar el mensaje
+            }
+        </script>
+        
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
 </body>
 
 </html>
