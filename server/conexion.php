@@ -1,9 +1,9 @@
 <?php
 // Datos de conexión
 $servername = "localhost";
-$username = "root";   // Cambia por tu usuario de MySQL
-$password = ""; // Cambia por tu contraseña de MySQL
-$dbname = "ppa_control-inventario";       // Nombre de la base de datos
+$username = "root";
+$password = "";
+$dbname = "ppa_control-inventario";
 
 // Crear la conexión
 $conn = new mysqli($servername, $username, $password, $dbname);

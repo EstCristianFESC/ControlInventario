@@ -25,5 +25,5 @@ if ($result->num_rows > 0) {
     echo "<tr><td colspan='5' class='text-center'>No hay clientes registrados</td></tr>";
 }
 
-$conn->close(); // Cerrar conexión
+$conn->close(); // Cerrar conexión
 ?>

@@ -1,9 +1,9 @@
 <?php
 session_start();
-include 'conexion.php';  // Incluir el archivo de conexión
+include 'conexion.php';
 
 // Obtener datos del formulario
-$user = $_POST['username']; // Asegúrate de que coincida con el nombre del campo en el formulario
+$user = $_POST['username'];
 $password = $_POST['password'];
 
 // Preparar y ejecutar la consulta para verificar el usuario

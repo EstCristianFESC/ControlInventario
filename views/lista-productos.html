@@ -107,15 +107,15 @@
                 </a>
             </nav>
         </div>
-
+        
         <div class="container mt-5">
             <form class="d-flex mb-4">
                 <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
                 <button class="btn btn-outline-success" type="submit">Buscar</button>
-            </form>            
+            </form>
             <h2><i class="fas fa-box me-2"></i>Productos</h2>
             <h5 class="text-muted"><i class="fas fa-list me-2"></i>Lista de productos</h5>
-    
+        
             <table class="table table-bordered table-hover">
                 <thead class="table-light">
                     <tr>
@@ -124,23 +124,49 @@
                         <th>Precio</th>
                         <th>Stock</th>
                         <th>Categoría</th>
-                        <th>Actualizar</th>
-                        <th>Eliminar</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="productos">
                     <tr>
-                        <td>1</td>
-                        <td>***</td>
-                        <td>***</td>
-                        <td>***</td>
-                        <td>***</td>
-                        <td><button class="btn btn-success"><i class="fas fa-edit"></i></button></td>
-                        <td><button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button></td>
+                        <td colspan="5" class="text-center">Cargando productos...</td>
                     </tr>
                 </tbody>
             </table>
         </div>
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                fetch('../server/lista-productos.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        const tbody = document.getElementById('productos');
+                        tbody.innerHTML = '';
+        
+                        if (data.length > 0) {
+                            data.forEach(producto => {
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td>${producto.id}</td>
+                                    <td>${producto.nombre_producto}</td>
+                                    <td>${producto.precio_producto}</td>
+                                    <td>${producto.stock_producto}</td>
+                                    <td>${producto.categoria_producto}</td>
+                                `;
+                                tbody.appendChild(row);
+                            });
+                        } else {
+                            tbody.innerHTML = '<tr><td colspan="5" class="text-center">No hay productos disponibles</td></tr>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al cargar productos:', error);
+                        const tbody = document.getElementById('productos');
+                        tbody.innerHTML = '<tr><td colspan="5" class="text-center">Error al cargar productos</td></tr>';
+                    });
+            });
+        </script>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
