@@ -1,20 +1,26 @@
 <?php
-header('Content-Type: application/json');
-include 'conexion.php'; // Asegúrate de que la ruta es correcta
+header('Content-Type: text/html; charset=UTF-8'); // Asegura la codificación correcta
+include 'conexion.php'; // Incluir la conexión a la base de datos
 
-// Consultar la lista de productos
-$sql = "SELECT id, nombre_producto, precio_producto, stock_producto, categoria_producto FROM productos";
+// Consulta para obtener los productos
+$sql = "SELECT id, nombre_producto, precio_producto, stock_producto, marca_producto FROM productos";
 $result = $conn->query($sql);
 
-$productos = [];
 if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-        $productos[] = $row;
+    $index = 1;
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>
+                <td>{$index}</td>
+                <td>{$row['nombre_producto']}</td>
+                <td>{$row['precio_producto']}</td>
+                <td>{$row['stock_producto']}</td>
+                <td>{$row['marca_producto']}</td>
+            </tr>";
+        $index++;
     }
+} else {
+    echo "<tr><td colspan='5' class='text-center'>No hay productos disponibles</td></tr>";
 }
-
-// Devolver los datos en formato JSON
-echo json_encode($productos);
 
 $conn->close();
 ?>

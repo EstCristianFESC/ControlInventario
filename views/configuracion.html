@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
     <link rel="icon" type="image/png" href="/views/img/icono.png">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -62,19 +63,6 @@
                     </a>
                 </div>
 
-                <!-- Categorías -->
-                <a class="nav-link text-dark" data-bs-toggle="collapse" href="#categoriasSubmenu" role="button" aria-expanded="false" aria-controls="categoriasSubmenu">
-                    <i class="fas fa-tags"></i> Categorías
-                </a>
-                <div class="collapse" id="categoriasSubmenu">
-                    <a class="nav-link text-dark ms-3" href="nueva-categoria.html">
-                        <i class="fas fa-tag"></i> Nueva Categoría
-                    </a>
-                    <a class="nav-link text-dark ms-3" href="lista-categorias.html">
-                        <i class="fas fa-list"></i> Lista de Categorías
-                    </a>
-                </div>
-
                 <!-- Productos -->
                 <a class="nav-link text-dark" data-bs-toggle="collapse" href="#productosSubmenu" role="button" aria-expanded="false" aria-controls="productosSubmenu">
                     <i class="fas fa-box"></i> Productos
@@ -109,47 +97,81 @@
         </div>
 
         <div class="container mt-5">
-			<div class="row justify-content-center">
-				<div class="col-md-8">
-					<h2 class="text-start"><i class="fas fa-building me-2"></i>Empresa</h2>
-					<h5 class="text-muted">Datos de empresa</h5>
-		
-					<!-- Formulario de Datos de Empresa -->
-					<form>
-						<!-- Nombre de la Empresa -->
-						<div class="mb-3">
-							<label for="nombreEmpresa" class="form-label">Nombre</label>
-							<input type="text" class="form-control" id="nombreEmpresa" value="Zapateria S.A.S">
-						</div>
-		
-						<!-- Teléfono y Email -->
-						<div class="row">
-							<div class="col-md-6 mb-3">
-								<label for="telefono" class="form-label">Teléfono</label>
-								<input type="tel" class="form-control" id="telefono" value="3100000000">
-							</div>
-							<div class="col-md-6 mb-3">
-								<label for="email" class="form-label">Email</label>
-								<input type="email" class="form-control" id="email" value="zapateria@zapatos.com">
-							</div>
-						</div>
-		
-						<!-- Dirección -->
-						<div class="mb-3">
-							<label for="direccion" class="form-label">Dirección</label>
-							<input type="text" class="form-control" id="direccion" value="Cúcuta, Villa del Rosario">
-						</div>
-		
-						<!-- Botón de Actualizar -->
-						<div class="text-center">
-							<button type="submit" class="btn btn-success">
-								<i class="fas fa-sync-alt me-2"></i>Actualizar
-							</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>		
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <h2 class="text-start"><i class="fas fa-building me-2"></i>Empresa</h2>
+                    <h5 class="text-muted">Datos de empresa</h5>
+        
+                    <!-- Alertas -->
+                    <div id="alert-container"></div>
+        
+                    <!-- Formulario de Datos de Empresa -->
+                    <form action="/server/actualizar_empresa.php" method="POST">
+                        <!-- Nombre de la Empresa -->
+                        <div class="mb-3">
+                            <label for="nombreEmpresa" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombreEmpresa" name="nombreEmpresa" value="Zapateria S.A.S" required>
+                        </div>
+        
+                        <!-- Teléfono y Email -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="telefono" class="form-label">Teléfono</label>
+                                <input type="tel" class="form-control" id="telefono" name="telefono" value="3100000000" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" value="zapateria@zapatos.com" required>
+                            </div>
+                        </div>
+        
+                        <!-- Dirección -->
+                        <div class="mb-3">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="direccion" name="direccion" value="Cúcuta, Villa del Rosario" required>
+                        </div>
+        
+                        <!-- Botón de Actualizar -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-sync-alt me-2"></i>Actualizar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            $(document).ready(function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const status = urlParams.get('status');
+                const message = urlParams.get('message');
+                let alertMessage = '';
+        
+                if (status && message) {
+                    if (status === 'success') {
+                        if (message === 'inserted') {
+                            alertMessage = 'Datos insertados correctamente.';
+                        } else if (message === 'updated') {
+                            alertMessage = 'Datos actualizados correctamente.';
+                        }
+                        $('#alert-container').html('<div class="alert alert-success">' + alertMessage + '</div>');
+                    } else if (status === 'error') {
+                        if (message === 'complete_fields') {
+                            alertMessage = 'Por favor, complete todos los campos.';
+                        } else if (message === 'insert_failed') {
+                            alertMessage = 'Error al insertar los datos.';
+                        } else if (message === 'update_failed') {
+                            alertMessage = 'Error al actualizar los datos.';
+                        } else if (message === 'prepare_failed') {
+                            alertMessage = 'Error en la preparación de la consulta.';
+                        }
+                        $('#alert-container').html('<div class="alert alert-danger">' + alertMessage + '</div>');
+                    }
+                }
+            });
+        </script>                                    
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
