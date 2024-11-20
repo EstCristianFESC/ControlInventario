@@ -9,6 +9,43 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
     <link rel="icon" type="image/png" href="/views/img/icono.png">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Establecer la fecha actual automáticamente
+        window.onload = function () {
+            const fechaInput = document.getElementById('fecha');
+            const today = new Date().toISOString().split('T')[0];
+            fechaInput.value = today;
+        };
+
+        // Buscar cliente por documento
+        function buscarCliente() {
+            const documento = document.getElementById('documento').value;
+
+            if (documento) {
+                fetch(`../server/buscar_cliente.php?documento=${documento}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.nombre) {
+                            document.getElementById('cliente').value = data.nombre;
+                        } else {
+                            alert('Cliente no encontrado.');
+                        }
+                    })
+                    .catch(error => console.error('Error al buscar cliente:', error));
+            } else {
+                alert('Por favor, ingrese un número de documento.');
+            }
+        }
+
+        // Calcular cambio automáticamente
+        function calcularCambio() {
+            const total = parseFloat(document.getElementById('total').value) || 0;
+            const pagado = parseFloat(document.getElementById('totalPagado').value) || 0;
+            const cambio = pagado - total;
+
+            document.getElementById('cambio').value = cambio.toFixed(2);
+        }
+    </script>
 </head>
 
 <body>
@@ -99,18 +136,24 @@
         <!-- Main Content -->
         <div class="container-fluid p-4 flex-grow-1">
             <div class="row">
-                <!-- Title -->
+                <!-- Título -->
                 <div class="col-12">
-                    <h3>Ventas - Nueva venta</h3>
+                    <h3>Ventas - Nueva Venta</h3>
                 </div>
-
+    
                 <!-- Formulario de producto -->
                 <div class="col-md-8">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <form class="row g-3">
+                            <form class="row g-3" method="POST" action="../server/guardar_venta.php">
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control" placeholder="Código de barras" />
+                                    <input
+                                        type="text"
+                                        name="codigo_barras"
+                                        class="form-control"
+                                        placeholder="Código de barras"
+                                        required
+                                    />
                                 </div>
                                 <div class="col-md-3">
                                     <button type="submit" class="btn btn-primary w-100">
@@ -120,7 +163,7 @@
                             </form>
                         </div>
                     </div>
-
+    
                     <!-- Tabla de productos -->
                     <table class="table table-bordered">
                         <thead>
@@ -139,7 +182,7 @@
                                 <td>****</td>
                                 <td>****</td>
                                 <td>
-                                    <input type="number" value="***" class="form-control" />
+                                    <input type="number" value="1" class="form-control" />
                                 </td>
                                 <td>****</td>
                                 <td>****</td>
@@ -149,31 +192,64 @@
                         </tbody>
                     </table>
                 </div>
-
+    
                 <!-- Datos de la venta -->
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body">
-                            <form>
+                            <form method="POST" action="../server/guardar_venta.php">
+                                <!-- Fecha -->
                                 <div class="mb-3">
                                     <label for="fecha" class="form-label">Fecha</label>
-                                    <input type="date" class="form-control" id="fecha" />
+                                    <input type="date" class="form-control" id="fecha" name="fecha" required />
                                 </div>
+    
+                                <!-- Buscar Cliente -->
+                                <div class="mb-3">
+                                    <label for="documento" class="form-label">Número de documento</label>
+                                    <div class="input-group">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="documento"
+                                            placeholder="Ingrese número de documento"
+                                        />
+                                        <button type="button" class="btn btn-secondary" onclick="buscarCliente()">
+                                            Buscar
+                                        </button>
+                                    </div>
+                                </div>
+    
+                                <!-- Nombre del Cliente -->
                                 <div class="mb-3">
                                     <label for="cliente" class="form-label">Cliente</label>
-                                    <input type="text" class="form-control" id="cliente" value="Público General" />
+                                    <input type="text" class="form-control" id="cliente" name="cliente" value="Público General" required />
                                 </div>
+    
+                                <!-- Total Pagado -->
                                 <div class="mb-3">
-                                    <label for="total" class="form-label">Total pagado por cliente</label>
-                                    <input type="text" class="form-control" id="total" value="0.00" />
+                                    <label for="totalPagado" class="form-label">Total pagado por cliente</label>
+                                    <input
+                                        type="number"
+                                        class="form-control"
+                                        id="totalPagado"
+                                        oninput="calcularCambio()"
+                                        required
+                                    />
                                 </div>
+    
+                                <!-- Cambio -->
                                 <div class="mb-3">
                                     <label for="cambio" class="form-label">Cambio devuelto al cliente</label>
-                                    <input type="text" class="form-control" id="cambio" value="0.00" />
+                                    <input type="text" class="form-control" id="cambio" readonly />
                                 </div>
+    
+                                <!-- Total a pagar -->
                                 <div class="mb-3">
-                                    <p class="h5">TOTAL A PAGAR: ****</p>
+                                    <p class="h5">TOTAL A PAGAR: <span id="totalAPagar">****</span></p>
+                                    <input type="hidden" id="total" name="total" value="0.00" />
                                 </div>
+    
                                 <button type="submit" class="btn btn-primary w-100">
                                     Guardar venta
                                 </button>
