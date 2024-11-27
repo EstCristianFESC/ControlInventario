@@ -9,6 +9,48 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
     <link rel="icon" type="image/png" href="/views/img/icono.png">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function agregarCliente() {
+            const clienteData = {
+                tipoDocumento: document.getElementById('tipoDocumento').value,
+                numeroDocumento: document.getElementById('numeroDocumento').value,
+                nombres: document.getElementById('nombres').value,
+                apellidos: document.getElementById('apellidos').value,
+                estado: document.getElementById('estado').value,
+                ciudad: document.getElementById('ciudad').value,
+                direccion: document.getElementById('direccion').value,
+                telefono: document.getElementById('telefono').value,
+                email: document.getElementById('email').value,
+            };
+
+            fetch('../server/agregar_cliente.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(clienteData)
+            })
+            .then(response => response.text()) // Cambiar a .text() para depuración
+            .then(data => {
+                try {
+                    const jsonData = JSON.parse(data);  // Convertir a JSON manualmente
+                    if (jsonData.status === 'success') {
+                        console.log('Cliente agregado exitosamente:', jsonData.message);
+                    } else {
+                        console.error('Error al agregar cliente:', jsonData.message);
+                        alert(`Error al agregar cliente: ${jsonData.message}`);
+                    }
+                } catch (e) {
+                    console.error('Error al parsear JSON:', e, data);
+                    alert('Error al agregar cliente. Por favor, intenta nuevamente.');
+                }
+            })
+            .catch(error => {
+                console.error('Error al agregar cliente:', error);
+                alert('Error al agregar cliente. Por favor, intenta nuevamente.');
+            });
+        }
+    </script>
 </head>
 
 <body>
