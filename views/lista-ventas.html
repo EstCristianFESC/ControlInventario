@@ -99,42 +99,57 @@
         </div>
 
         <div class="container mt-5">
-            <form class="d-flex mb-4">
-                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
-                <button class="btn btn-outline-success" type="submit">Buscar</button>
-            </form>            
-            <h2><i class="fas fa-file-invoice-dollar me-2"></i>Ventas</h2>
-            <h5 class="text-muted"><i class="fas fa-list me-2"></i>Lista de Ventas</h5>
-    
-            <table class="table table-bordered table-hover">
-                <thead class="table-light">
+            <div id="message" style="display: none;" class="alert"></div> <!-- Div para mensajes -->
+            
+            <form class="d-flex mb-4" onsubmit="return buscarVentas(event);">
+                <input id="terminoBusqueda" class="form-control me-2" type="search" placeholder="Buscar por cliente o número de documento" aria-label="Buscar">
+                <button id="buscarButton" class="btn btn-outline-success" type="button">Buscar</button>
+            </form>
+            <h3>Ventas</h3>
+            <p class="text-muted">Lista de Ventas</p>
+            <table class="table table-bordered">
+                <thead>
                     <tr>
-                        <th>NRO.</th>
-                        <th>Código</th>
+                        <th>#</th>
                         <th>Fecha</th>
                         <th>Cliente</th>
-                        <th>Vendedor</th>
                         <th>Total</th>
-                        <th>Opciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>***</td>
-                        <td>***</td>
-                        <td>***</td>
-                        <td>A***</td>
-                        <td>***</td>
-                        <td>
-                            <button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i></button>
-                            <button class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
-                        </td>
-                    </tr>
+                <tbody id="venta-list">
+                    <!-- Aquí se cargarán las ventas desde PHP -->
                 </tbody>
             </table>
-        </div>
+        </div>                                 
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const buscarInput = document.getElementById('terminoBusqueda');
+                const buscarButton = document.getElementById('buscarButton');
+                const tbody = document.getElementById('venta-list');
+
+                function cargarVentas(termino = '') {
+                    fetch(`../server/buscar_ventas.php?termino=${encodeURIComponent(termino)}`)
+                        .then(response => response.text())
+                        .then(data => {
+                            tbody.innerHTML = data;
+                        })
+                        .catch(error => {
+                            console.error('Error al cargar las ventas:', error);
+                            tbody.innerHTML = '<tr><td colspan="4">Error al cargar ventas.</td></tr>';
+                        });
+                }
+
+                function buscarVentas(event) {
+                    event.preventDefault(); // Evitar el envío normal del formulario
+                    const terminoBusqueda = buscarInput.value;
+                    cargarVentas(terminoBusqueda);
+                    return false; // Evitar el envío del formulario
+                }
+
+                buscarButton.addEventListener('click', buscarVentas);
+            });
+        </script>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
