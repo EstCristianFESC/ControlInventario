@@ -109,7 +109,7 @@
             <table class="table table-bordered table-hover">
                 <thead class="table-light">
                     <tr>
-                        <th>#</th>
+                        <th>SKU</th>
                         <th>Nombre</th>
                         <th>Precio</th>
                         <th>Stock</th>
@@ -120,41 +120,40 @@
                     <!-- Sin productos iniciales -->
                 </tbody>
             </table>
-        </div>        
+        </div>               
         
         <script>
-        document.addEventListener("DOMContentLoaded", function() {
-    const form = document.getElementById('buscador-form');
-    const terminoBusqueda = document.getElementById('termino_busqueda');
-    const productosContainer = document.getElementById('productos');
+            document.addEventListener("DOMContentLoaded", function() {
+                const form = document.getElementById('buscador-form');
+                const terminoBusqueda = document.getElementById('termino_busqueda');
+                const productosContainer = document.getElementById('productos');
 
-    // Función para cargar productos
-    function cargarProductos(termino = '') {
-        fetch(`/server/lista-productos.php?termino_busqueda=${termino}`)
-            .then(response => response.text())
-            .then(html => {
-                productosContainer.innerHTML = html;
-            })
-            .catch(error => {
-                console.error('Error al cargar productos:', error);
-                productosContainer.innerHTML = '<tr><td colspan="5" class="text-center">Error al cargar productos</td></tr>';
+                // Función para cargar productos
+                function cargarProductos(termino = '') {
+                    fetch(`/server/buscar_productos.php?termino_busqueda=${termino}`)
+                        .then(response => response.text())
+                        .then(html => {
+                            productosContainer.innerHTML = html;
+                        })
+                        .catch(error => {
+                            console.error('Error al cargar productos:', error);
+                            productosContainer.innerHTML = '<tr><td colspan="5" class="text-center">Error al cargar productos</td></tr>';
+                        });
+                }
+
+                // Manejar la entrada automática del escáner
+                terminoBusqueda.addEventListener('input', function() {
+                    if (terminoBusqueda.value.length > 0) {
+                        cargarProductos(terminoBusqueda.value);
+                    }
+                });
+
+                // Manejar el envío del formulario de búsqueda
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();  // Evitar la recarga automática
+                    cargarProductos(terminoBusqueda.value);  // Cargar los productos basados en el término de búsqueda
+                });
             });
-    }
-
-    // Manejar la entrada automática del escáner
-    terminoBusqueda.addEventListener('input', function() {
-        if (terminoBusqueda.value.length > 0) {
-            cargarProductos(terminoBusqueda.value);
-        }
-    });
-
-    // Manejar el envío del formulario de búsqueda
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();  // Evitar la recarga automática
-        cargarProductos(terminoBusqueda.value);  // Cargar los productos basados en el término de búsqueda
-    });
-});
-
         </script>                        
     </div>
 
