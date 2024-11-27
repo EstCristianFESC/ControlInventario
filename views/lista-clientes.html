@@ -101,10 +101,12 @@
         </div>
         
         <div class="container mt-5">
-            <form class="d-flex mb-4">
-                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
+            <div id="message" style="display: none;" class="alert"></div> <!-- Div para mensajes -->
+            
+            <form class="d-flex mb-4" onsubmit="return buscarClientes(event);">
+                <input id="terminoBusqueda" class="form-control me-2" type="search" placeholder="Buscar por nombre o número de documento" aria-label="Buscar">
                 <button class="btn btn-outline-success" type="submit">Buscar</button>
-            </form>   
+            </form>
             <h3>Clientes</h3>
             <p class="text-muted">Lista de clientes</p>
             <table class="table table-bordered">
@@ -123,23 +125,117 @@
             </table>
         </div>
         
+        <!-- Modal para actualizar cliente -->
+        <div class="modal fade" id="updateClientModal" tabindex="-1" aria-labelledby="updateClientModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="updateClientForm" action="../server/actualizar_cliente.php" method="POST">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="updateClientModalLabel">Actualizar Cliente</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="updateClientId" name="id">
+                            <div class="mb-3">
+                                <label for="updateTipoDocumento" class="form-label">Tipo de documento</label>
+                                <select class="form-control" id="updateTipoDocumento" name="tipo_documento" required>
+                                    <option value="Cédula">Cédula</option>
+                                    <option value="NIT">NIT</option>
+                                    <option value="Pasaporte">Pasaporte</option>
+                                    <option value="No Adjudicatario">No Adjudicatario</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateNumeroDocumento" class="form-label">Número de documento</label>
+                                <input type="text" class="form-control" id="updateNumeroDocumento" name="numero_documento" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateNombres" class="form-label">Nombres</label>
+                                <input type="text" class="form-control" id="updateNombres" name="nombre" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateApellidos" class="form-label">Apellidos</label>
+                                <input type="text" class="form-control" id="updateApellidos" name="apellidos" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateEstado" class="form-label">Departamento</label>
+                                <input type="text" class="form-control" id="updateEstado" name="departamento" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateCiudad" class="form-label">Ciudad</label>
+                                <input type="text" class="form-control" id="updateCiudad" name="ciudad" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateDireccion" class="form-label">Dirección</label>
+                                <input type="text" class="form-control" id="updateDireccion" name="direccion" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateTelefono" class="form-label">Teléfono</label>
+                                <input type="text" class="form-control" id="updateTelefono" name="telefono" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="updateEmail" name="correo" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>               
+        
         <script>
             // Función para cargar la lista de clientes
-            function loadClients() {
-                fetch('../server/lista-clientes.php')  // Cambia la ruta si es necesario
+            function loadClients(termino = '') {
+                fetch(`../server/lista-clientes.php?termino=${encodeURIComponent(termino)}`)
                     .then(response => response.text())
                     .then(data => {
                         document.getElementById('client-list').innerHTML = data;
+                        document.querySelectorAll('.update-btn').forEach(button => {
+                            button.addEventListener('click', function() {
+                                const clientId = this.getAttribute('data-id');
+                                const tipoDocumento = this.getAttribute('data-tipo_documento');
+                                const numeroDocumento = this.getAttribute('data-numero_documento');
+                                const nombres = this.getAttribute('data-nombres');
+                                const apellidos = this.getAttribute('data-apellidos');
+                                const departamento = this.getAttribute('data-departamento');
+                                const ciudad = this.getAttribute('data-ciudad');
+                                const direccion = this.getAttribute('data-direccion');
+                                const telefono = this.getAttribute('data-telefono');
+                                const correo = this.getAttribute('data-correo');
+
+                                document.getElementById('updateClientId').value = clientId;
+                                document.getElementById('updateTipoDocumento').value = tipoDocumento;
+                                document.getElementById('updateNumeroDocumento').value = numeroDocumento;
+                                document.getElementById('updateNombres').value = nombres;
+                                document.getElementById('updateApellidos').value = apellidos;
+                                document.getElementById('updateEstado').value = departamento;
+                                document.getElementById('updateCiudad').value = ciudad;
+                                document.getElementById('updateDireccion').value = direccion;
+                                document.getElementById('updateTelefono').value = telefono;
+                                document.getElementById('updateEmail').value = correo;
+                            });
+                        });
                     })
                     .catch(error => console.error('Error al cargar los clientes:', error));
             }
-        
+
+            // Función para manejar la búsqueda de clientes
+            function buscarClientes(event) {
+                event.preventDefault(); // Evitar el envío normal del formulario
+                const terminoBusqueda = document.getElementById('terminoBusqueda').value;
+                loadClients(terminoBusqueda);
+                return false; // Evitar el envío del formulario
+            }
+
             // Cargar clientes al cargar la página
-            window.onload = loadClients;
-        </script>
-        
-        <div id="message" style="display: none;" class="alert"></div>
-        <script>
+            window.onload = function() {
+                loadClients();
+            };
+
             // Función para obtener parámetros de la URL
             function getParameterByName(name) {
                 const url = window.location.href;
@@ -150,22 +246,24 @@
                 if (!results[2]) return '';
                 return decodeURIComponent(results[2].replace(/\+/g, ' '));
             }
-        
+
             // Verifica si hay un mensaje en la URL
-            const success = getParameterByName('success');
-            const error = getParameterByName('error');
-            const messageDiv = document.getElementById('message');
-        
-            if (success) {
-                messageDiv.className = 'alert alert-success'; // Estilo para éxito
-                messageDiv.textContent = success;
-                messageDiv.style.display = 'block'; // Mostrar el mensaje
-            } else if (error) {
-                messageDiv.className = 'alert alert-danger'; // Estilo para error
-                messageDiv.textContent = error; // Mensaje de error dinámico
-                messageDiv.style.display = 'block'; // Mostrar el mensaje
-            }
-        </script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const success = getParameterByName('success');
+                const error = getParameterByName('error');
+                const messageDiv = document.getElementById('message');
+
+                if (success) {
+                    messageDiv.className = 'alert alert-success'; // Estilo para éxito
+                    messageDiv.textContent = success;
+                    messageDiv.style.display = 'block'; // Mostrar el mensaje
+                } else if (error) {
+                    messageDiv.className = 'alert alert-danger'; // Estilo para error
+                    messageDiv.textContent = error; // Mensaje de error dinámico
+                    messageDiv.style.display = 'block'; // Mostrar el mensaje
+                }
+            });
+        </script>        
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

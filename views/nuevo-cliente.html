@@ -9,48 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
     <link rel="icon" type="image/png" href="/views/img/icono.png">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function agregarCliente() {
-            const clienteData = {
-                tipoDocumento: document.getElementById('tipoDocumento').value,
-                numeroDocumento: document.getElementById('numeroDocumento').value,
-                nombres: document.getElementById('nombres').value,
-                apellidos: document.getElementById('apellidos').value,
-                estado: document.getElementById('estado').value,
-                ciudad: document.getElementById('ciudad').value,
-                direccion: document.getElementById('direccion').value,
-                telefono: document.getElementById('telefono').value,
-                email: document.getElementById('email').value,
-            };
-
-            fetch('../server/agregar_cliente.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(clienteData)
-            })
-            .then(response => response.text()) // Cambiar a .text() para depuración
-            .then(data => {
-                try {
-                    const jsonData = JSON.parse(data);  // Convertir a JSON manualmente
-                    if (jsonData.status === 'success') {
-                        console.log('Cliente agregado exitosamente:', jsonData.message);
-                    } else {
-                        console.error('Error al agregar cliente:', jsonData.message);
-                        alert(`Error al agregar cliente: ${jsonData.message}`);
-                    }
-                } catch (e) {
-                    console.error('Error al parsear JSON:', e, data);
-                    alert('Error al agregar cliente. Por favor, intenta nuevamente.');
-                }
-            })
-            .catch(error => {
-                console.error('Error al agregar cliente:', error);
-                alert('Error al agregar cliente. Por favor, intenta nuevamente.');
-            });
-        }
-    </script>
 </head>
 
 <body>
@@ -199,29 +157,36 @@
             </form>
         
             <div id="message" style="display: none;" class="alert"></div>
-        </div>
+        </div>        
         
         <script>
             function agregarCliente(event) {
                 event.preventDefault(); // Evitar el envío normal del formulario
-        
-                const formData = new FormData(document.getElementById('clienteForm'));
-        
-                fetch('../server/agregar_cliente.php', {
+
+                const clienteData = {
+                    tipo_documento: document.getElementById('tipoDocumento').value,
+                    numero_documento: document.getElementById('numeroDocumento').value,
+                    nombre: document.getElementById('nombres').value,
+                    apellidos: document.getElementById('apellidos').value,
+                    departamento: document.getElementById('estado').value,
+                    ciudad: document.getElementById('ciudad').value,
+                    direccion: document.getElementById('direccion').value,
+                    telefono: document.getElementById('telefono').value,
+                    correo: document.getElementById('email').value,
+                };
+
+                fetch('../server/nuevo_cliente.php', {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(clienteData)
                 })
                 .then(response => response.json())
                 .then(data => {
                     const messageDiv = document.getElementById('message');
                     if (data.status === 'success') {
-                        messageDiv.className = 'alert alert-success'; // Clase para éxito
-                        messageDiv.textContent = data.message; // Mensaje de éxito
-                        messageDiv.style.display = 'block'; // Mostrar el mensaje
-                        // Redirigir a lista-clientes.html después de 2 segundos
-                        setTimeout(() => {
-                            window.location.href = 'lista-clientes.html';
-                        }, 2000);
+                        window.location.href = data.redirect;
                     } else {
                         messageDiv.className = 'alert alert-danger'; // Clase para error
                         messageDiv.textContent = data.message; // Mensaje de error
@@ -230,8 +195,9 @@
                 })
                 .catch(error => {
                     console.error('Error al agregar cliente:', error);
+                    alert('Error al agregar cliente. Por favor, intenta nuevamente.');
                 });
-        
+
                 return false; // Evitar el envío del formulario
             }
         </script>

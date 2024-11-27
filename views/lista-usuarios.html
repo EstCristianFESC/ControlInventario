@@ -97,40 +97,68 @@
                 </a>
             </nav>
         </div>
-
+        
         <div class="container mt-5">
             <h3>Usuarios</h3>
             <p class="text-muted">Lista de usuarios</p>
+        
+            <!-- Div para mostrar mensajes de éxito o error -->
+            <div id="message" style="display: none;"></div>
+        
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Usuario</th>
+                        <th>Rol</th>
                         <th>Actualizar</th>
-                        <!-- Se eliminó la columna de Eliminar -->
                     </tr>
                 </thead>
                 <tbody id="user-list">
                     <!-- Aquí se cargarán los usuarios desde PHP -->
-                    <!-- Asegúrate de que el script PHP también omita la columna de Eliminar -->
                 </tbody>
             </table>
         </div>
         
-        <script>
-            // Función para cargar la lista de usuarios
-            function loadUsers() {
-                fetch('../server/lista-usuarios.php')  // Cambia la ruta si es necesario
-                    .then(response => response.text())
-                    .then(data => {
-                        document.getElementById('user-list').innerHTML = data;
-                    })
-                    .catch(error => console.error('Error al cargar los usuarios:', error));
-            }
-        
-            // Cargar usuarios al cargar la página
-            window.onload = loadUsers;
-        </script>
+        <!-- Modal para actualizar usuario -->
+        <div class="modal fade" id="updateUserModal" tabindex="-1" aria-labelledby="updateUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="updateUserForm" action="../server/actualizar_usuario.php" method="POST">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="updateUserModalLabel">Actualizar Usuario</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="updateUserId" name="id">
+                            <div class="mb-3">
+                                <label for="updateUsuario" class="form-label">Usuario</label>
+                                <input type="text" class="form-control" id="updateUsuario" name="usuario" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateRole" class="form-label">Rol</label>
+                                <select class="form-control" id="updateRole" name="rol" required>
+                                    <option value="admin">Admin</option>
+                                    <option value="vendedor">Vendedor</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateClave" class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" id="updateClave" name="clave">
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateRepetirClave" class="form-label">Repetir contraseña</label>
+                                <input type="password" class="form-control" id="updateRepetirClave" name="repetirClave">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         
         <script>
             // Función para obtener parámetros de la URL
@@ -144,23 +172,47 @@
                 return decodeURIComponent(results[2].replace(/\+/g, ' '));
             }
         
-            // Verifica si hay un mensaje en la URL
-            const success = getParameterByName('success');
-            const error = getParameterByName('error');
-            const messageDiv = document.getElementById('message');
+            // Mostrar mensaje de éxito o error basado en los parámetros de la URL
+            document.addEventListener("DOMContentLoaded", function() {
+                const success = getParameterByName('success');
+                const error = getParameterByName('error');
+                const messageDiv = document.getElementById('message');
         
-            if (success) {
-                messageDiv.className = 'alert alert-success'; // Estilo para éxito
-                messageDiv.textContent = success;
-                messageDiv.style.display = 'block'; // Mostrar el mensaje
-            } else if (error) {
-                messageDiv.className = 'alert alert-danger'; // Estilo para error
-                messageDiv.textContent = error; // Mensaje de error dinámico
-                messageDiv.style.display = 'block'; // Mostrar el mensaje
+                if (success) {
+                    messageDiv.className = 'alert alert-success'; // Estilo para éxito
+                    messageDiv.textContent = success;
+                    messageDiv.style.display = 'block'; // Mostrar el mensaje
+                } else if (error) {
+                    messageDiv.className = 'alert alert-danger'; // Estilo para error
+                    messageDiv.textContent = error; // Mensaje de error dinámico
+                    messageDiv.style.display = 'block'; // Mostrar el mensaje
+                }
+            });
+        
+            // Función para cargar la lista de usuarios
+            function loadUsers() {
+                fetch('../server/lista-usuarios.php')  // Cambia la ruta si es necesario
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('user-list').innerHTML = data;
+                        document.querySelectorAll('.update-btn').forEach(button => {
+                            button.addEventListener('click', function() {
+                                const userId = this.getAttribute('data-id');
+                                const userName = this.getAttribute('data-username');
+                                const userRole = this.getAttribute('data-role');
+        
+                                document.getElementById('updateUserId').value = userId;
+                                document.getElementById('updateUsuario').value = userName;
+                                document.getElementById('updateRole').value = userRole;
+                            });
+                        });
+                    })
+                    .catch(error => console.error('Error al cargar los usuarios:', error));
             }
-        </script>
         
-
+            // Cargar usuarios al cargar la página
+            window.onload = loadUsers;
+        </script>                      
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     
 </body>
